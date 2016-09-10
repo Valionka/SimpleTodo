@@ -9,11 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Main activity functionality
@@ -133,9 +130,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Read the saved items from a file
+     * Read the saved items from SQL lite
+     *
+     * uncomment the code to write to SQL lite
      */
     private void readItems() {
+
+        TodoItemDatabase db = TodoItemDatabase.getInstance(this);
+        List<Todo> todos = db.getAllTodos();
+        items = new ArrayList<>();
+        for (Todo todo :
+                todos) {
+            items.add(todo.getName());
+        }
+
+        /*
         File filesDir = getFilesDir();
         File todoFile = new File(filesDir, "todo.txt");
         try {
@@ -143,19 +152,34 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e){
             items = new ArrayList<>();
         }
+        */
     }
 
     /**
-     * Write the saved items to a file
+     * Write the saved items to SQL lite
+     *
+     * uncomment the code to write to a file
      */
     private void writeItems() {
-        File filesDir = getFilesDir();
+
+        TodoItemDatabase db = TodoItemDatabase.getInstance(this);
+        db.deleteAllTodos();
+
+        for (String item :
+                items) {
+            Todo newTodo = new Todo(item, 1);
+            db.addTODO(newTodo);
+
+        }
+
+       /* File filesDir = getFilesDir();
         File todoFile = new File(filesDir, "todo.txt");
         try {
             FileUtils.writeLines(todoFile, items);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        */
     }
 
 }
