@@ -22,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter<String> itemsAdapter;
     ListView lvItems;
     private final int REQUEST_CODE = 20;
+    List<Todo> todos;
+    TodoAdapter todoAdapter;
 
     /**
      * Set up the activity
@@ -33,12 +35,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         lvItems = (ListView) findViewById(R.id.lvItems);
         //populateSampleItems();
-        // read the saved items from a file
+        // read the saved items from a data source
         readItems();
-        itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
-        setupListViewListener();
-        lvItems.setAdapter(itemsAdapter);
+        //itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
+        //lvItems.setAdapter(itemsAdapter);
 
+        todoAdapter = new TodoAdapter(this, todos);
+        setupListViewListener();
+        lvItems.setAdapter(todoAdapter);
         setupEditListViewListener();
     }
 
@@ -137,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
     private void readItems() {
 
         TodoItemDatabase db = TodoItemDatabase.getInstance(this);
-        List<Todo> todos = db.getAllTodos();
+        todos = db.getAllTodos();
         items = new ArrayList<>();
         for (Todo todo :
                 todos) {
@@ -167,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
 
         for (String item :
                 items) {
-            Todo newTodo = new Todo(item, 1);
+            Todo newTodo = new Todo(item, Todo.Priority.LOW);
             db.addTODO(newTodo);
 
         }

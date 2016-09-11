@@ -8,9 +8,19 @@ package com.codepath.simpletodo;
 public class Todo {
 
     public String name;
+    public Priority priority;
+    public String date;
 
-    public Integer getPriority() {
-        return priority;
+    public static enum Priority {
+        LOW, MEDIUM, HIGH
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getName() {
@@ -21,13 +31,16 @@ public class Todo {
         this.name = name;
     }
 
-    public void setPriority(Integer priority) {
+    public void setPriority(Priority priority) {
         this.priority = priority;
     }
 
-    public Integer priority;
+    public Priority getPriority() {
+        return priority;
+    }
 
-    public Todo(String name, Integer priority){
+
+    public Todo(String name, Priority priority){
         this.name = name;
         this.priority = priority;
     }
