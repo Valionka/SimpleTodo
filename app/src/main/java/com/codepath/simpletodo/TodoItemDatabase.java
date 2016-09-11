@@ -19,7 +19,7 @@ import java.util.List;
 public class TodoItemDatabase extends SQLiteOpenHelper {
     // Database Info
     private static final String DATABASE_NAME = "todosDatabase";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 7;
 
     // Table Name
     private static final String TABLE_TODOS = "todos";
