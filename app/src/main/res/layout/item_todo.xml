@@ -5,10 +5,14 @@
 
     <TextView
         android:id="@+id/tvName"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Name" />
-    <TextView
+        android:text="Name"
+        android:textStyle="normal"
+        android:textSize="17dp"
+        android:padding="10dp"
+        android:theme="@style/AppTheme" />
+ <!--   <TextView
         android:id="@+id/tvPriority"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,5 +22,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Date" />
-
+-->
 </LinearLayout>

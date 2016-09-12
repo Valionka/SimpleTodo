@@ -40,13 +40,13 @@ public class Todo {
     }
 
 
-    public Todo(String name, Priority priority){
+    public Todo(String name, Priority priority, String date){
         this.name = name;
         this.priority = priority;
+        this.date = date;
     }
 
     public Todo(){}
-
 
     @Override
     public boolean equals(Object o) {
@@ -56,14 +56,17 @@ public class Todo {
         Todo todo = (Todo) o;
 
         if (!getName().equals(todo.getName())) return false;
-        return getPriority() != null ? getPriority().equals(todo.getPriority()) : todo.getPriority() == null;
+        if (getPriority() != todo.getPriority()) return false;
+        return getDate().equals(todo.getDate());
 
     }
 
     @Override
     public int hashCode() {
         int result = getName().hashCode();
-        result = 31 * result + (getPriority() != null ? getPriority().hashCode() : 0);
+        result = 31 * result + getPriority().hashCode();
+        result = 31 * result + getDate().hashCode();
         return result;
     }
+
 }

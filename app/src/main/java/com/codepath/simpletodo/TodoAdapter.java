@@ -27,12 +27,12 @@ public class TodoAdapter extends ArrayAdapter<Todo> {
         }
         // Lookup view for data population
         TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
-        TextView tvPriority = (TextView) convertView.findViewById(R.id.tvPriority);
-        TextView tvDate = (TextView) convertView.findViewById(R.id.tvDate);
+        //TextView tvPriority = (TextView) convertView.findViewById(R.id.tvPriority);
+        //TextView tvDate = (TextView) convertView.findViewById(R.id.tvDate);
         // Populate the data into the template view using the data object
         tvName.setText(todo.name);
-        tvPriority.setText(todo.priority.toString());
-        tvDate.setText(todo.date);
+        //tvPriority.setText(todo.priority.toString());
+        //tvDate.setText(todo.date);
         // Return the completed view to render on screen
         return convertView;
     }

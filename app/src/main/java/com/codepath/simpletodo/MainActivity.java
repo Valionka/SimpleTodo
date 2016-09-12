@@ -5,11 +5,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,8 +16,8 @@ import java.util.List;
  */
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<String> items;
-    ArrayAdapter<String> itemsAdapter;
+    //ArrayList<String> items;
+    //ArrayAdapter<String> itemsAdapter;
     ListView lvItems;
     private final int REQUEST_CODE = 20;
     List<Todo> todos;
@@ -34,9 +32,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         lvItems = (ListView) findViewById(R.id.lvItems);
-        //populateSampleItems();
+
         // read the saved items from a data source
         readItems();
+
+        //populateSampleItems();
         //itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
         //lvItems.setAdapter(itemsAdapter);
 
@@ -48,13 +48,14 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Populates a default item list - not used as items read from file
-     */
+
     public void populateSampleItems(){
         items = new ArrayList<String>();
         items.add("Item 1");
         items.add("Item 2");
         items.add("Item 3");
     }
+    */
 
     /**
      * Adds an item to the list
@@ -67,7 +68,8 @@ public class MainActivity extends AppCompatActivity {
         if(itemText.length() == 0) {
             InputCheckerUtil.displayEmptyInputErrorMsg(this);
         } else {
-            itemsAdapter.add(itemText);
+
+            todoAdapter.add(new Todo(itemText, Todo.Priority.LOW, "date") );
             etNewItem.setText("");
             writeItems();
         }
@@ -87,9 +89,9 @@ public class MainActivity extends AppCompatActivity {
             int pos = data.getExtras().getInt("pos", -1);
 
             if(pos != -1) {
-                items.remove(pos);
-                items.add(pos, editItemText);
-                itemsAdapter.notifyDataSetChanged();
+                todos.remove(pos);
+                todos.add(pos, new Todo(editItemText, Todo.Priority.LOW, "date"));
+                todoAdapter.notifyDataSetChanged();
                 writeItems();
             }
         }
@@ -103,8 +105,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapter,
                                            View item, int pos, long id) {
-                items.remove(pos);
-                itemsAdapter.notifyDataSetChanged();
+                todos.remove(pos);
+                todoAdapter.notifyDataSetChanged();
                 writeItems();
                 return true;
             }
@@ -121,11 +123,11 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int pos, long id){
 
                 // get the edited item
-                String editItemText = (String) parent.getItemAtPosition(pos);
+                Todo todo = (Todo)parent.getItemAtPosition(pos);
 
                 // pass the edited item to the edit activity
                 Intent i = new Intent(MainActivity.this, EditItemActivity.class);
-                i.putExtra("editItemText", editItemText);
+                i.putExtra("editItemText", todo.getName());
                 i.putExtra("pos", pos);
 
                 startActivityForResult(i, REQUEST_CODE);
@@ -136,17 +138,12 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Read the saved items from SQL lite
      *
-     * uncomment the code to write to SQL lite
+     * uncomment the code to write to a file
      */
     private void readItems() {
 
         TodoItemDatabase db = TodoItemDatabase.getInstance(this);
         todos = db.getAllTodos();
-        items = new ArrayList<>();
-        for (Todo todo :
-                todos) {
-            items.add(todo.getName());
-        }
 
         /*
         File filesDir = getFilesDir();
@@ -169,11 +166,8 @@ public class MainActivity extends AppCompatActivity {
         TodoItemDatabase db = TodoItemDatabase.getInstance(this);
         db.deleteAllTodos();
 
-        for (String item :
-                items) {
-            Todo newTodo = new Todo(item, Todo.Priority.LOW);
-            db.addTODO(newTodo);
-
+        for (Todo todo : todos) {
+            db.addTODO(todo);
         }
 
        /* File filesDir = getFilesDir();
