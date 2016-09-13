@@ -19,7 +19,7 @@ import java.util.List;
 public class TodoItemDatabase extends SQLiteOpenHelper {
     // Database Info
     private static final String DATABASE_NAME = "todosDatabase";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
     // Table Name
     private static final String TABLE_TODOS = "todos";
@@ -28,6 +28,7 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
     private static final String KEY_TODO_ID = "id";
     private static final String KEY_TODO_NAME = "name";
     private static final String KEY_TODO_PRIORITY = "priority";
+    private static final String KEY_TODO_DUE_DATE = "duedate";
 
     // logging
     private static final String TAG = "DB Error";
@@ -60,8 +61,9 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
         String CREATE_TODOS_TABLE = "CREATE TABLE " + TABLE_TODOS +
                 "(" +
                 KEY_TODO_ID + " INTEGER PRIMARY KEY," + // Define a primary key
-                KEY_TODO_NAME + " TEXT," +
-                KEY_TODO_PRIORITY + " INTEGER" +
+                KEY_TODO_NAME + " TEXT NOT NULL DEFAULT ''," +
+                KEY_TODO_PRIORITY + " TEXT CHECK( "+ KEY_TODO_PRIORITY + " IN ('LOW', 'MEDIUM', 'HIGH') ) NOT NULL DEFAULT 'LOW'," +
+                KEY_TODO_DUE_DATE + " TEXT" +
                 ")";
 
         db.execSQL(CREATE_TODOS_TABLE);
@@ -86,7 +88,8 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
 
             ContentValues values = new ContentValues();
             values.put(KEY_TODO_NAME, todo.name);
-            values.put(KEY_TODO_PRIORITY, todo.priority);
+            values.put(KEY_TODO_PRIORITY, todo.priority.toString());
+            values.put(KEY_TODO_DUE_DATE, todo.date);
 
             // Notice how we haven't specified the primary key. SQLite auto increments the primary key column.
             db.insertOrThrow(TABLE_TODOS, null, values);
@@ -128,7 +131,7 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
 
                     Todo newTodo = new Todo();
                     newTodo.name = cursor.getString(cursor.getColumnIndex(KEY_TODO_NAME));
-                    newTodo.priority = Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_TODO_PRIORITY)));
+                    newTodo.priority = Todo.Priority.valueOf(cursor.getString(cursor.getColumnIndex(KEY_TODO_PRIORITY)));
                     todos.add(newTodo);
                 } while (cursor.moveToNext());
             }

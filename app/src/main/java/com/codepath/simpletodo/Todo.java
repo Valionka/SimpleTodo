@@ -8,9 +8,19 @@ package com.codepath.simpletodo;
 public class Todo {
 
     public String name;
+    public Priority priority;
+    public String date;
 
-    public Integer getPriority() {
-        return priority;
+    public static enum Priority {
+        LOW, MEDIUM, HIGH
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getName() {
@@ -21,19 +31,22 @@ public class Todo {
         this.name = name;
     }
 
-    public void setPriority(Integer priority) {
+    public void setPriority(Priority priority) {
         this.priority = priority;
     }
 
-    public Integer priority;
+    public Priority getPriority() {
+        return priority;
+    }
 
-    public Todo(String name, Integer priority){
+
+    public Todo(String name, Priority priority, String date){
         this.name = name;
         this.priority = priority;
+        this.date = date;
     }
 
     public Todo(){}
-
 
     @Override
     public boolean equals(Object o) {
@@ -43,14 +56,17 @@ public class Todo {
         Todo todo = (Todo) o;
 
         if (!getName().equals(todo.getName())) return false;
-        return getPriority() != null ? getPriority().equals(todo.getPriority()) : todo.getPriority() == null;
+        if (getPriority() != todo.getPriority()) return false;
+        return getDate().equals(todo.getDate());
 
     }
 
     @Override
     public int hashCode() {
         int result = getName().hashCode();
-        result = 31 * result + (getPriority() != null ? getPriority().hashCode() : 0);
+        result = 31 * result + getPriority().hashCode();
+        result = 31 * result + getDate().hashCode();
         return result;
     }
+
 }
